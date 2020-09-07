@@ -1,0 +1,30 @@
+name: AWS SSM Send-Command Example
+
+on:
+    push:
+      branches: [ master ]
+    pull_request:
+      branches: [ master ]
+
+jobs:
+    build:
+          runs-on: ubuntu-latest
+      
+          steps:
+          - uses: actions/checkout@v1
+          - name: Install Node.js
+            uses: actions/setup-node@v1
+            with:
+              node-version: '10.x'
+          - name: Install npm dependencies
+            run: yarn install
+          - name: Run build task
+            run: npm build
+          - name: Deploy to Server
+            uses: easingthemes/ssh-deploy@v2.1.1
+            env:
+                SSH_PRIVATE_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDjkA4yNxG2xDyzVJjshrS3BPKA+zNnKIHUdPqym1zSljZLtVwHkuMsceSFp9PpTCSxNovRcQ1b2DLHKiK5COuGKaJg7UbvWsx4Yi9INAAjgO9lZvFoEpYFgWLJGPtfVUdL4iTJXd196xnDi0AtELV5DuG75B47K5JL5s+9D/zPKbVQjfKSr+4e9BXNgnazhsk3oSnrwIrxm7jIKoP7qKu7Ewhf05E5BcFpD5uOYxZ12TyAlGnnIFv/TWrf6hof/VIW6t3ywBqq/BTojZtGL4H52DyjYVeT2dpCRD4mY63Q7AEvaTJWl6m6YeQzxiAtk/9ZuK6n81ACvpg2Njo1Yj7fVTZ7ohKBqI6r+3Og8ngGgYsGq5x4MNuRmZ8bgN+/TujCkE+o8Gc57wPl0ZPsCcyxn/UdhrgcBry9Ntu8UkCGpgeGManV+DKwcgY8G13KSHcUXri7FwYplEzRDquAWy1p0R9lVGJvxnzLth6faqJfALp2ZdRSMrSrqJtgTOvT6QgRn4hdsDKvDkhihseeMIO1ekkK2YdWqsN46h3IU4zFwlVBB1SL1ieG6NhAzxVz8BiYCmrlyYQ5Z+uzgKwZXoep6bbK69Lzza4VigBItGK7C8kxL4pTiiCsEZgJm6KN0EymUjK9mFy8SZj8qjsrfb38OU2JqKJIDs+a4HiElpPLiw== maksym@Maksyms-MacBook-Pro.local
+                SOURCE: "build/"
+                REMOTE_HOST: ec2-18-163-50-26.ap-east-1.compute.amazonaws.com
+                REMOTE_USER: ubuntu
+                TARGET: /home/ubuntu/backend/test
